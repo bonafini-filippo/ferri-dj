@@ -5,6 +5,7 @@ import { FaXTwitter } from 'react-icons/fa6';
 import { isLive } from '@/actions/getVideos';
 import { FaCircle } from 'react-icons/fa';
 import Link from 'next/link';
+import ShareButton from './ui/ShareButton';
 
 const Hero = async () => {
   const isTwLive = await isLive();
@@ -22,6 +23,7 @@ const Hero = async () => {
             <span className="text-xl uppercase">Live now</span>
           </Link>
         )}
+        <ShareButton className="absolute p-4 text-red-500 flex justify-center items-center gap-2 right-0" />
         <Image
           className="w-full"
           src={MoroniImg}
