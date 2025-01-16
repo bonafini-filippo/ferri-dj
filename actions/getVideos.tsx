@@ -1,6 +1,6 @@
 'use server';
 
-export default async function getYtVideos() {
+export async function getYtVideos() {
   const API_KEY = 'AIzaSyB_Zx5QKNjMDTdq1v2SJmVxN1CYHdjRn0M';
   const CHANNEL_ID = 'UCvb-39ePh7PujNIktpJ1oMA';
   const MAX_RESULTS = 6;
@@ -10,6 +10,57 @@ export default async function getYtVideos() {
   try {
     const response = await fetch(url);
     return await response.json();
+  } catch (error) {
+    return error;
+  }
+}
+
+// pages/api/getTwitchLive.js
+export async function getTwVideos() {
+  const username = 'gm_moro';
+  const clientId = 'q9t7mz10x1jarkkrn1l04uw3jh416i';
+  const clientSecret = 'azwwys4alnsgpy2oupmymuluomxmex';
+
+  try {
+    const tokenResponse = await fetch('https://id.twitch.tv/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'client_credentials',
+      }),
+    });
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // Ottieni l'ID utente
+    const userResponse = await fetch(
+      `https://api.twitch.tv/helix/users?login=${username}`,
+      {
+        headers: {
+          'Client-ID': clientId,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const userData = await userResponse.json();
+    const userId = userData.data[0]?.id;
+    if (!userId) {
+      return { error: 'Utente non trovato', statusCode: 404 };
+    }
+    // Ottieni i VOD
+    const vodResponse = await fetch(
+      `https://api.twitch.tv/helix/videos?user_id=${userId}&type=archive&sort=time&first=6`,
+      {
+        headers: {
+          'Client-ID': clientId,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const vodData = await vodResponse.json();
+    return vodData;
   } catch (error) {
     return error;
   }

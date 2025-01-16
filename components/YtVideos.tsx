@@ -1,4 +1,4 @@
-import getYtVideos from '@/actions/getVideos';
+import { getYtVideos } from '@/actions/getVideos';
 import Card from './ui/Card';
 
 interface ItemProps {
