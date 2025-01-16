@@ -1,5 +1,4 @@
 import { getTwVideos } from '@/actions/getVideos';
-import Card from './ui/Card';
 import Image from 'next/image';
 
 interface DataProps {
