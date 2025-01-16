@@ -6,15 +6,12 @@ import { FaBolt, FaStopwatch } from 'react-icons/fa';
 import Bullet from '../public/bullet.svg';
 import { IoIosArrowDropright } from 'react-icons/io';
 import Link from 'next/link';
-import Line from './ui/Line';
 
 const ScoreElo = async () => {
   const score = await getElo();
   const position = await getPosition();
-  console.log(position);
   return (
     <section className="p-4 mt-5">
-      <Line />
       <Link
         href="https://www.chess.com/member/moro182"
         className="bg-[#2a2a2a] relative rounded-md overflow-hidden  flex gap-6 p-4  items-center"

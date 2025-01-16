@@ -12,7 +12,6 @@ interface ItemProps {
 
 const YtVideos = async () => {
   const { items } = await getYtVideos();
-  console.log(items);
   return (
     <section className="p-4 mt-10">
       <h2 className="font-bold mb-2 text-lg uppercase">Ultimi video</h2>
