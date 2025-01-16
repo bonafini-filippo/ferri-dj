@@ -9,7 +9,7 @@ const Footer = () => {
       </div>
 
       <div className="flex justify-center items-center font-extralight text-sm">
-        Se ti piace finisco i dettagli, sei un grande!
+        GM - Luca Moroni Jr
       </div>
     </div>
   );
