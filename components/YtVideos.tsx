@@ -1,5 +1,6 @@
 import { getYtVideos } from '@/actions/getVideos';
 import Card from './ui/Card';
+import Line from './ui/Line';
 
 interface ItemProps {
   id: { videoId: string };
@@ -26,6 +27,7 @@ const YtVideos = async () => {
           />
         ))}
       </div>
+      <Line />
     </section>
   );
 };

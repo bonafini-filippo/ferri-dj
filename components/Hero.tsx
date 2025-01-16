@@ -14,10 +14,13 @@ const Hero = async () => {
       {/* IMMAGINE DI COPERTINA */}
       <div className="relative">
         {isTwLive && (
-          <div className="absolute p-4 text-red-500 flex justify-center items-center gap-2">
+          <Link
+            href={'https://www.twitch.tv/gm_moro'}
+            className="absolute p-4 text-red-500 flex justify-center items-center gap-2"
+          >
             <FaCircle />
             <span className="text-xl uppercase">Live now</span>
-          </div>
+          </Link>
         )}
         <Image
           className="w-full"
