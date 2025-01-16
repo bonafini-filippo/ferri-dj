@@ -15,12 +15,9 @@ export async function getYtVideos() {
   }
 }
 
-// pages/api/getTwitchLive.js
-export async function getTwVideos() {
-  const username = 'gm_moro';
+export async function authTw() {
   const clientId = 'q9t7mz10x1jarkkrn1l04uw3jh416i';
   const clientSecret = 'azwwys4alnsgpy2oupmymuluomxmex';
-
   try {
     const tokenResponse = await fetch('https://id.twitch.tv/oauth2/token', {
       method: 'POST',
@@ -32,7 +29,34 @@ export async function getTwVideos() {
       }),
     });
     const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
+    return tokenData.access_token;
+  } catch (error) {}
+}
+
+export async function twLiveOn() {
+  const clientId = 'q9t7mz10x1jarkkrn1l04uw3jh416i';
+  const clientSecret = 'azwwys4alnsgpy2oupmymuluomxmex';
+  try {
+    const tokenResponse = await fetch('https://id.twitch.tv/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'client_credentials',
+      }),
+    });
+    const tokenData = await tokenResponse.json();
+    return tokenData.access_token;
+  } catch (error) {}
+}
+
+export async function getTwVideos() {
+  const username = 'gm_moro';
+  const clientId = 'q9t7mz10x1jarkkrn1l04uw3jh416i';
+
+  try {
+    const accessToken = await authTw();
 
     // Ottieni l'ID utente
     const userResponse = await fetch(

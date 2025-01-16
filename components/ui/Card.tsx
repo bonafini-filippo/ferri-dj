@@ -1,14 +1,19 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface CardProps {
   title: string;
   description: string;
   image: string;
+  video_id: string;
 }
 
-const Card = ({ title, description, image }: CardProps) => {
+const Card = ({ title, description, image, video_id }: CardProps) => {
   return (
-    <div className="bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] flex shrink-0 justify-center items-center gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]">
+    <Link
+      href={'https://www.youtube.com/watch?v=' + video_id}
+      className="bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] flex shrink-0 justify-center items-center gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
+    >
       <div className="h-[120px] w-[120px] md:h-[150px] md:w-[150px]  shrink-0">
         <Image
           className="object-cover h-full w-full"
@@ -24,7 +29,7 @@ const Card = ({ title, description, image }: CardProps) => {
         </h1>
         <p className="line-clamp-2 text-sm">{description}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 
