@@ -6,6 +6,7 @@ import { FaBolt, FaStopwatch } from 'react-icons/fa';
 import Bullet from '../public/bullet.svg';
 import { IoIosArrowDropright } from 'react-icons/io';
 import Link from 'next/link';
+import Line from './ui/Line';
 
 const ScoreElo = async () => {
   const score = await getElo();
@@ -13,6 +14,7 @@ const ScoreElo = async () => {
   console.log(position);
   return (
     <section className="p-4 mt-5">
+      <Line />
       <Link
         href="https://www.chess.com/member/moro182"
         className="bg-[#2a2a2a] relative rounded-md overflow-hidden  flex gap-6 p-4  items-center"
@@ -63,20 +65,20 @@ const ScoreElo = async () => {
         </div>
         <div></div>
       </Link>
-      <div className="flex flex-col mt-10 mb-5">
+      <div className="flex flex-col mt-10 mb-8">
         <div className=" text-[30px] uppercase bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
-          Fide World:
+          FIDE World Rank
         </div>
         <span className=" text-[140px] leading-none bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
-          #{position.world_rank_active}
+          {position.world_rank_active}
         </span>
       </div>
       <div>
         <div className=" text-[30px] uppercase bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
-          Fide Italia:
+          FIDE Italian Rank
         </div>
         <span className=" text-[140px] leading-none bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
-          #{position.national_rank_active}
+          {position.national_rank_active}
         </span>
       </div>
     </section>
