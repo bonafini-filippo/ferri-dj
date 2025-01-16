@@ -3,7 +3,7 @@ import Image from 'next/image';
 interface CardProps {
   title: string;
   description: string;
-  image: any;
+  image: string;
 }
 
 const Card = ({ title, description, image }: CardProps) => {
