@@ -33,22 +33,27 @@ export async function authTw() {
   } catch (error) {}
 }
 
-export async function twLiveOn() {
+export async function twLive() {
+  const username = 'gm_moro';
   const clientId = 'q9t7mz10x1jarkkrn1l04uw3jh416i';
-  const clientSecret = 'azwwys4alnsgpy2oupmymuluomxmex';
+
   try {
-    const tokenResponse = await fetch('https://id.twitch.tv/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        grant_type: 'client_credentials',
-      }),
-    });
-    const tokenData = await tokenResponse.json();
-    return tokenData.access_token;
-  } catch (error) {}
+    const accessToken = await authTw();
+    // Ottieni le live
+    const streamResponse = await fetch(
+      `https://api.twitch.tv/helix/streams?user_login=${username}`,
+      {
+        headers: {
+          'Client-ID': clientId,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const streamData = await streamResponse.json();
+    return streamData;
+  } catch (error) {
+    return error;
+  }
 }
 
 export async function getTwVideos() {
