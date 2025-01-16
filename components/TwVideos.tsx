@@ -1,11 +1,12 @@
 import { getTwVideos } from '@/actions/getVideos';
 import Image from 'next/image';
+import { FaEye } from 'react-icons/fa';
 
 interface DataProps {
   id: string;
   title: string;
   thumbnail_url: string;
-  views: number;
+  view_count: number;
   duration: string;
   url: string;
 }
@@ -17,17 +18,30 @@ const TwVideos = async () => {
       {data.map((item: DataProps) => (
         <div
           key={item.id}
-          className="bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] flex shrink-0 justify-center items-center gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
+          className="relative bg-[#2a2a2a] max-w-[300px] md:max-w-[390px]  shrink-0  gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
         >
-          <Image
-            layout="intrinsic"
-            width={640} // Larghezza desiderata
-            height={360} // Altezza desiderata
-            alt={item.title}
-            src={item.thumbnail_url
-              .replace('%{width}', '640')
-              .replace('%{height}', '360')}
-          />
+          <div className="absolute top-4 right-4 p-2 ">
+            <span className="flex items-center gap-2">
+              <div>
+                <FaEye />
+              </div>
+              <div> {item.view_count}</div>
+            </span>
+          </div>
+          <div className="absolute bottom-0 left-0 p-2 ">
+            <span className="flex items-center gap-2">{item.duration}</span>
+          </div>
+          <div>
+            <Image
+              layout="intrinsic"
+              width={640} // Larghezza desiderata
+              height={360} // Altezza desiderata
+              alt={item.title}
+              src={item.thumbnail_url
+                .replace('%{width}', '640')
+                .replace('%{height}', '360')}
+            />
+          </div>
         </div>
       ))}
     </div>
