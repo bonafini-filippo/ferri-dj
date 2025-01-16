@@ -1,4 +1,4 @@
-import { getTwVideos } from '@/actions/getVideos';
+import { getTwVideos, isLive } from '@/actions/getVideos';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaEye } from 'react-icons/fa';
@@ -14,25 +14,30 @@ interface DataProps {
 
 const TwVideos = async () => {
   const { data } = await getTwVideos();
+  const isTwLive = await isLive();
+
+  // Se isTwLive è true, escludi il primo elemento (l'ultimo video)
+  const videosToShow = isTwLive ? data.slice(1) : data;
+
   return (
-    <section className=" p-4 mt-10">
+    <section className="p-4 mt-10">
       <h2 className="font-bold mb-2 text-lg uppercase">Ultime live</h2>
       <div className="flex gap-4 overflow-x-scroll scrollbar-hide">
-        {data.map((item: DataProps) => (
+        {videosToShow.map((item: DataProps) => (
           <Link
             href={item.url}
             key={item.id}
-            className="relative bg-[#2a2a2a] max-w-[300px] md:max-w-[390px]  shrink-0  gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
+            className="relative bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] shrink-0 gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
           >
-            <div className="absolute top-2 right-3   p-1 backdrop-blur-md rounded-md ">
+            <div className="absolute top-2 right-3 p-1 bg-[#2a2a2a] rounded-md">
               <span className="flex items-center gap-2">
                 <div>
                   <FaEye />
                 </div>
-                <div> {item.view_count}</div>
+                <div>{item.view_count}</div>
               </span>
             </div>
-            <div className="absolute bottom-2 left-3 p-1 backdrop-blur-md rounded-md ">
+            <div className="absolute bottom-2 left-3 p-1 bg-[#2a2a2a] rounded-md">
               <span className="flex items-center gap-2">
                 {item.duration.replace(/h|m|s/g, (match) =>
                   match === 'h' ? ':' : match === 'm' ? ':' : ''
@@ -41,7 +46,6 @@ const TwVideos = async () => {
             </div>
             <div>
               <Image
-                layout="intrinsic"
                 width={640} // Larghezza desiderata
                 height={360} // Altezza desiderata
                 alt={item.title}

@@ -33,7 +33,11 @@ export async function authTw() {
   } catch (error) {}
 }
 
-export async function twLive() {
+type TwitchStream = {
+  type: string;
+};
+
+export async function isLive() {
   const username = 'gm_moro';
   const clientId = 'q9t7mz10x1jarkkrn1l04uw3jh416i';
 
@@ -50,7 +54,12 @@ export async function twLive() {
       }
     );
     const streamData = await streamResponse.json();
-    return streamData;
+    if (streamData && streamData.data) {
+      return streamData.data.some(
+        (stream: TwitchStream) => stream.type === 'live'
+      );
+    }
+    return false;
   } catch (error) {
     return error;
   }
