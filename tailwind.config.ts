@@ -7,5 +7,4 @@ export default {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {},
-  plugins: [require('@tailwindcss/line-clamp')],
 } satisfies Config;
