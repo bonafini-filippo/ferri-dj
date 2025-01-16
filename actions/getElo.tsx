@@ -11,3 +11,14 @@ export async function getElo() {
     return error;
   }
 }
+
+export async function getPosition() {
+  const url =
+    'https://fide-api.vercel.app/player_info/?fide_id=865834&history=false';
+  try {
+    const response = await fetch(url);
+    return await response.json();
+  } catch (error) {
+    return error;
+  }
+}

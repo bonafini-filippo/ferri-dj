@@ -1,4 +1,4 @@
-import { getElo } from '@/actions/getElo';
+import { getElo, getPosition } from '@/actions/getElo';
 import React from 'react';
 import ChessLogo from '../public/chessLogo.webp';
 import Image from 'next/image';
@@ -9,6 +9,8 @@ import Link from 'next/link';
 
 const ScoreElo = async () => {
   const score = await getElo();
+  const position = await getPosition();
+  console.log(position);
   return (
     <section className="p-4 mt-5">
       <Link
@@ -59,7 +61,24 @@ const ScoreElo = async () => {
             </span>
           </div>
         </div>
+        <div></div>
       </Link>
+      <div className="flex flex-col mt-10 mb-5">
+        <div className=" text-[30px] uppercase bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
+          Fide World:
+        </div>
+        <span className=" text-[140px] leading-none bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
+          #{position.world_rank_active}
+        </span>
+      </div>
+      <div>
+        <div className=" text-[30px] uppercase bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
+          Fide Italia:
+        </div>
+        <span className=" text-[140px] leading-none bg-gradient-to-b from-gray-50 via-gray-400 to-slate-900 bg-clip-text text-transparent text-center">
+          #{position.national_rank_active}
+        </span>
+      </div>
     </section>
   );
 };
