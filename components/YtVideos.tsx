@@ -1,6 +1,5 @@
 import { getYtVideos } from '@/actions/getVideos';
 import Card from './ui/Card';
-import Line from './ui/Line';
 
 interface ItemProps {
   id: { videoId: string };
@@ -13,11 +12,12 @@ interface ItemProps {
 
 const YtVideos = async () => {
   const { items } = await getYtVideos();
+  console.log(items);
   return (
     <section className="p-4 mt-10">
       <h2 className="font-bold mb-2 text-lg uppercase">Ultimi video</h2>
       <div className="flex gap-4 overflow-x-scroll scrollbar-hide ">
-        {items.map((item: ItemProps) => (
+        {items?.map((item: ItemProps) => (
           <Card
             key={item.id.videoId}
             video_id={item.id.videoId}
@@ -27,7 +27,6 @@ const YtVideos = async () => {
           />
         ))}
       </div>
-      <Line />
     </section>
   );
 };

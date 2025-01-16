@@ -4,7 +4,13 @@ import Line from './ui/Line';
 const Footer = () => {
   return (
     <div className="p-4 mt-3">
-      <Line />
+      <div className="mb-4">
+        <Line />
+      </div>
+
+      <div className="flex justify-center items-center font-extralight text-sm">
+        Se ti piace lo finiamo
+      </div>
     </div>
   );
 };

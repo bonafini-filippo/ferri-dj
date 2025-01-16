@@ -1,7 +1,7 @@
 'use server';
 
 export async function getYtVideos() {
-  const API_KEY = 'AIzaSyB_Zx5QKNjMDTdq1v2SJmVxN1CYHdjRn0M';
+  const API_KEY = 'AIzaSyDz5C1VvQwp6eNohP-0jLIX0C770CPOWwM';
   const CHANNEL_ID = 'UCvb-39ePh7PujNIktpJ1oMA';
   const MAX_RESULTS = 6;
 
