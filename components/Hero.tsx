@@ -35,7 +35,7 @@ const Hero = async () => {
       </div>
       {/* TITOLO */}
       <div>
-        <h1 className="text-[38px]  text-center font-bold mt-16 ">
+        <h1 className="text-[38px]  text-center font-bold mt-7 ">
           Luca Moroni Jr
         </h1>
       </div>
