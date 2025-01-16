@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import MoroniImg from '@/public/luca-moroni.jpeg';
+import MoroniImg from '@/public/luca-moroni.png';
+// import MoroniImg from '@/public/luca-moroni.jpeg';
 import { FaInstagram, FaYoutube, FaTwitch, FaChess } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { isLive } from '@/actions/getVideos';
@@ -31,12 +32,11 @@ const Hero = async () => {
           width={1000}
           height={1000}
         />
-        <div className="bg-gradient-to-t from-[#121212] to-transparent  h-40 -bottom-0.5 right-0 left-0 absolute"></div>
       </div>
       {/* TITOLO */}
       <div>
         <h1 className="text-[38px]  text-center font-bold mt-16 ">
-          Luca Moroni Jr - GM
+          Luca Moroni Jr
         </h1>
       </div>
       {/* SOCIAL  */}
