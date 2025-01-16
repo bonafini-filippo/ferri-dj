@@ -2,6 +2,7 @@ import { getTwVideos, isLive } from '@/actions/getVideos';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaEye } from 'react-icons/fa';
+import Line from './ui/Line';
 
 interface DataProps {
   id: string;
@@ -23,7 +24,7 @@ const TwVideos = async () => {
     <section className="p-4 mt-10">
       <h2 className="font-bold mb-2 text-lg uppercase">Ultime live</h2>
       <div className="flex gap-4 overflow-x-scroll scrollbar-hide">
-        {videosToShow.map((item: DataProps) => (
+        {videosToShow?.map((item: DataProps) => (
           <Link
             href={item.url}
             key={item.id}
@@ -56,6 +57,9 @@ const TwVideos = async () => {
             </div>
           </Link>
         ))}
+        <div className="mb-4">
+          <Line />
+        </div>
       </div>
     </section>
   );
