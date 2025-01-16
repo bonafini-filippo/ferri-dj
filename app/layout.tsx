@@ -34,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" className={sfProDisplay.className}>
-      <body className="md:w-screen md:h-screen md:flex md:justify-center md:items-center bg-gradient-to-r from-[#040404] via-[#0A1535] to-[#1F2227]">
-        <div className="bg-[#121212] text-white md:max-w-[600px] md:rounded-lg md:overflow-hidden">
+      <body className=" md:flex md:justify-center  bg-gradient-to-r from-[#040404] via-[#0A1535] to-[#1F2227] md:mx-20">
+        <div className="bg-[#121212] text-white md:max-w-[600px] md:rounded-lg md:overflow-y-hidden">
           {children}
         </div>
       </body>

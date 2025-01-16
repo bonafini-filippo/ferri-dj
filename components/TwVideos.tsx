@@ -20,8 +20,9 @@ const TwVideos = async () => {
           className="bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] flex shrink-0 justify-center items-center gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
         >
           <Image
-            width={500}
-            height={500}
+            layout="intrinsic"
+            width={640} // Larghezza desiderata
+            height={360} // Altezza desiderata
             alt={item.title}
             src={item.thumbnail_url
               .replace('%{width}', '640')
