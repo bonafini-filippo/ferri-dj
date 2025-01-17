@@ -10,7 +10,7 @@ const Footer = () => {
         <Line />
       </div>
 
-      <div className="flex  justify-end items-center font-extralight text-sm">
+      <div className="flex  justify-center items-center font-extralight text-sm">
         <a href="https://webcraft-iota.vercel.app/it">
           <Image
             src={WebcraftLogo}
