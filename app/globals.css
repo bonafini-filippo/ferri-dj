@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.embla {
+  max-width: 48rem;
+  margin: auto;
+}
+.embla__viewport {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
+.embla__slide {
+  transform: translate3d(0, 0, 0);
+  min-width: 0;
+}
+.embla__slide__number {
+  overflow: hidden;
+  user-select: none;
+}

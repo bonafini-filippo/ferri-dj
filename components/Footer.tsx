@@ -1,7 +1,8 @@
 import React from 'react';
 import Line from './ui/Line';
-import WebcraftLogo from '@/public/webcraft-logo.svg';
+import WebcraftLogo from '@/public/webcraft.png';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
@@ -10,16 +11,23 @@ const Footer = () => {
         <Line />
       </div>
 
-      <div className="flex  justify-center items-center font-extralight text-sm">
-        <a href="https://webcraft-iota.vercel.app/it">
-          <Image
-            src={WebcraftLogo}
-            width={200}
-            height={90}
-            alt="Webcraft - soluzioni digitali"
-          ></Image>
-        </a>
+      <div className="flex my-5  justify-between items-center font-extralight ">
+        <Link href={'/privacy-policy'}>Privacy policy</Link>
+
+        <Link href={'/privacy-policy'}>Privacy preferences</Link>
       </div>
+
+      <a
+        className="flex gap-1 font-semibold text-xs justify-center items-center uppercase"
+        href="https://webcraft-iota.vercel.app/it"
+      >
+        <Image
+          src={WebcraftLogo}
+          width={150}
+          height={1500}
+          alt="Webcraft - soluzioni digitali"
+        ></Image>
+      </a>
     </div>
   );
 };

@@ -7,9 +7,7 @@ import Bullet from '../public/bullet.svg';
 import { IoIosArrowDropright } from 'react-icons/io';
 import Link from 'next/link';
 
-const ScoreElo = async () => {
-  const score = await getElo();
-  const position = await getPosition();
+const ScoreElo = async ({ score, position }: any) => {
   return (
     <section className="p-4 mt-5">
       <Link

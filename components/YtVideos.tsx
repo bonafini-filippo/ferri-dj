@@ -1,31 +1,25 @@
-import { getYtVideos } from '@/actions/getVideos';
-import Card from './ui/Card';
+import YtCarousel from './YtCarouse';
 
-interface ItemProps {
-  id: { videoId: string };
-  snippet: {
-    title: string;
-    description: string;
-    thumbnails: { medium: { url: string } };
+import { FC } from 'react';
+
+interface YtVideosProps {
+  recentVideos: {
+    items: {
+      id: { videoId: string };
+      snippet: {
+        title: string;
+        description: string;
+        thumbnails: { medium: { url: string } };
+      };
+    }[];
   };
 }
 
-const YtVideos = async () => {
-  const { items } = await getYtVideos();
+const YtVideos: FC<YtVideosProps> = ({ recentVideos }) => {
   return (
     <section className="p-4 mt-10">
       <h2 className="font-bold mb-2 text-lg uppercase">Ultimi video</h2>
-      <div className="flex gap-4 overflow-x-scroll scrollbar-hide ">
-        {items?.map((item: ItemProps) => (
-          <Card
-            key={item.id.videoId}
-            video_id={item.id.videoId}
-            title={item.snippet.title}
-            description={item.snippet.description}
-            image={item.snippet.thumbnails.medium.url}
-          />
-        ))}
-      </div>
+      <YtCarousel slides={recentVideos.items} />
     </section>
   );
 };

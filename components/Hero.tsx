@@ -3,14 +3,11 @@ import MoroniImg from '@/public/luca-moroni.png';
 // import MoroniImg from '@/public/luca-moroni.jpeg';
 import { FaInstagram, FaYoutube, FaTwitch, FaChess } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { isLive } from '@/actions/getVideos';
 import { FaCircle } from 'react-icons/fa';
 import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
 
-const Hero = async () => {
-  const isTwLive = await isLive();
-
+const Hero = ({ isTwLive }: { isTwLive: boolean }) => {
   return (
     <section>
       {/* IMMAGINE DI COPERTINA */}
