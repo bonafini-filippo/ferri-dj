@@ -1,4 +1,3 @@
-import { getElo, getPosition } from '@/actions/getElo';
 import React from 'react';
 import ChessLogo from '../public/chessLogo.webp';
 import Image from 'next/image';
@@ -7,7 +6,19 @@ import Bullet from '../public/bullet.svg';
 import { IoIosArrowDropright } from 'react-icons/io';
 import Link from 'next/link';
 
-const ScoreElo = async ({ score, position }: any) => {
+interface ScoreEloProps {
+  score: {
+    chess_rapid: { last: { rating: number } };
+    chess_blitz: { last: { rating: number } };
+    chess_bullet: { last: { rating: number } };
+  };
+  position: {
+    world_rank_active: number;
+    national_rank_active: number;
+  };
+}
+
+const ScoreElo = async ({ score, position }: ScoreEloProps) => {
   return (
     <section className="p-4 mt-5">
       <Link

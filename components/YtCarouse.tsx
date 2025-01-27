@@ -20,7 +20,7 @@ interface ItemProps {
 
 const YtCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props;
-  const [emblaRef] = useEmblaCarousel(options);
+  const [] = useEmblaCarousel(options);
 
   return (
     <Carousel>

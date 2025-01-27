@@ -22,7 +22,7 @@ type PropType = {
 
 const TwCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props;
-  const [emblaRef] = useEmblaCarousel(options);
+  const [] = useEmblaCarousel(options);
 
   return (
     <Carousel>
