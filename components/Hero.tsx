@@ -21,6 +21,18 @@ const Hero = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [videoEnded, setVideoEnded] = useState(false);
 
+  // React doesn't set the muted attribute in the DOM, only the JS property.
+  // iOS Safari requires the HTML attribute for autoplay to work.
+  const setVideoRef = useCallback((el: HTMLVideoElement | null) => {
+    if (el) {
+      el.setAttribute('muted', '');
+      el.setAttribute('playsinline', '');
+      el.muted = true;
+      el.play().catch(() => {});
+    }
+    (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = el;
+  }, []);
+
   const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number, onDone?: () => void) => {
@@ -126,8 +138,9 @@ const Hero = () => {
         />
 
         {/* Video layer */}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
-          ref={videoRef}
+          ref={setVideoRef}
           className={`w-full transition-opacity duration-700 ${
             videoEnded ? 'opacity-0' : 'opacity-100'
           }`}
@@ -135,6 +148,7 @@ const Hero = () => {
           autoPlay
           muted
           playsInline
+          preload="auto"
           onEnded={handleVideoEnd}
         />
       </div>
