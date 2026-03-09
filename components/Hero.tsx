@@ -17,23 +17,11 @@ import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
 
 const Hero = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const silentVideoRef = useRef<HTMLVideoElement>(null);
+  const audioVideoRef = useRef<HTMLVideoElement>(null);
+  const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [videoEnded, setVideoEnded] = useState(false);
-
-  // React doesn't set the muted attribute in the DOM, only the JS property.
-  // iOS Safari requires the HTML attribute for autoplay to work.
-  const setVideoRef = useCallback((el: HTMLVideoElement | null) => {
-    if (el) {
-      el.setAttribute('muted', '');
-      el.setAttribute('playsinline', '');
-      el.muted = true;
-      el.play().catch(() => {});
-    }
-    (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = el;
-  }, []);
-
-  const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number, onDone?: () => void) => {
     if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
@@ -54,59 +42,67 @@ const Hero = () => {
   }, []);
 
   const toggleMute = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const silent = silentVideoRef.current;
+    const audio = audioVideoRef.current;
+    if (!silent || !audio) return;
 
     if (isMuted) {
-      video.volume = 0;
-      video.muted = false;
+      // Switch from silent to audio video
+      audio.currentTime = silent.currentTime;
+      audio.volume = 0;
+      audio.play();
+      silent.style.display = 'none';
+      audio.style.display = 'block';
       setIsMuted(false);
-      video.play();
-      fadeVolume(video, 0, 1, 400);
+      fadeVolume(audio, 0, 1, 400);
     } else {
-      fadeVolume(video, video.volume, 0, 400, () => {
-        video.muted = true;
+      // Switch from audio to silent video
+      fadeVolume(audio, audio.volume, 0, 400, () => {
+        silent.currentTime = audio.currentTime;
+        audio.style.display = 'none';
+        silent.style.display = 'block';
+        audio.pause();
         setIsMuted(true);
       });
     }
   }, [isMuted, fadeVolume]);
 
   const handleVideoEnd = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const audio = audioVideoRef.current;
 
-    if (!video.muted) {
-      fadeVolume(video, video.volume, 0, 500, () => {
-        video.muted = true;
+    if (!isMuted && audio) {
+      fadeVolume(audio, audio.volume, 0, 500, () => {
+        audio.pause();
         setIsMuted(true);
         setVideoEnded(true);
       });
     } else {
       setVideoEnded(true);
     }
-  }, [fadeVolume]);
+  }, [isMuted, fadeVolume]);
 
   const handleReplay = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const silent = silentVideoRef.current;
+    const audio = audioVideoRef.current;
+    if (!silent || !audio) return;
 
     setVideoEnded(false);
 
-    // small delay to let crossfade start, then play with audio
     setTimeout(() => {
-      video.currentTime = 0;
-      video.volume = 0;
-      video.muted = false;
-      video.play();
+      // Replay with audio
+      audio.currentTime = 0;
+      audio.volume = 0;
+      audio.play();
+      silent.style.display = 'none';
+      audio.style.display = 'block';
       setIsMuted(false);
-      fadeVolume(video, 0, 1, 600);
+      fadeVolume(audio, 0, 1, 600);
     }, 100);
   }, [fadeVolume]);
 
   return (
     <section>
       <div className="relative">
-        {/* Top-left button: mute/unmute or replay */}
         {videoEnded ? (
           <button
             onClick={handleReplay}
@@ -137,16 +133,30 @@ const Hero = () => {
           height={1000}
         />
 
-        {/* Video layer */}
+        {/* Silent video - autoplays reliably on iOS (no audio track) */}
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
-          ref={setVideoRef}
+          ref={silentVideoRef}
           className={`w-full transition-opacity duration-700 ${
             videoEnded ? 'opacity-0' : 'opacity-100'
           }`}
-          src="/video.mp4"
+          src="/video-silent.mp4"
           autoPlay
           muted
+          playsInline
+          preload="auto"
+          onEnded={handleVideoEnd}
+        />
+
+        {/* Audio video - hidden by default, shown when unmuted */}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video
+          ref={audioVideoRef}
+          className={`w-full transition-opacity duration-700 ${
+            videoEnded ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ display: 'none' }}
+          src="/video.mp4"
           playsInline
           preload="auto"
           onEnded={handleVideoEnd}
