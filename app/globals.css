@@ -12,15 +12,10 @@
 .embla__container {
   display: flex;
   touch-action: pan-y pinch-zoom;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 .embla__slide {
+  transform: translate3d(0, 0, 0);
   min-width: 0;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 .embla__slide__number {
   overflow: hidden;
