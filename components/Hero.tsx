@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import {
   FaInstagram,
@@ -21,6 +21,33 @@ const Hero = () => {
   const fadeRef = useRef<number | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [videoEnded, setVideoEnded] = useState(false);
+
+  // Force autoplay on mount (mobile browsers sometimes block autoPlay attribute)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const tryPlay = () => {
+      video.muted = true;
+      video.play().catch(() => {
+        // If still blocked, retry on first user interaction
+        const playOnInteraction = () => {
+          video.muted = true;
+          video.play();
+          document.removeEventListener('touchstart', playOnInteraction);
+          document.removeEventListener('click', playOnInteraction);
+        };
+        document.addEventListener('touchstart', playOnInteraction, { once: true });
+        document.addEventListener('click', playOnInteraction, { once: true });
+      });
+    };
+
+    if (video.readyState >= 2) {
+      tryPlay();
+    } else {
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+    }
+  }, []);
 
   const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number) => {
     if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
