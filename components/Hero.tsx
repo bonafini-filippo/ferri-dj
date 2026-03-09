@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import {
   FaInstagram,
@@ -17,11 +17,38 @@ import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
 
 const Hero = () => {
-  const silentVideoRef = useRef<HTMLVideoElement>(null);
-  const audioVideoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [videoEnded, setVideoEnded] = useState(false);
+
+  // Inject video as raw HTML to bypass React hydration muted bug on iOS
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.innerHTML = `<video src="/video.mp4" autoplay muted playsinline webkit-playsinline preload="auto" style="width:100%"></video>`;
+
+    const video = container.querySelector('video');
+    if (!video) return;
+    videoRef.current = video;
+
+    video.muted = true;
+    video.defaultMuted = true;
+
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
+
+    tryPlay();
+    video.addEventListener('canplay', tryPlay, { once: true });
+    setTimeout(tryPlay, 300);
+
+    video.addEventListener('ended', () => {
+      setVideoEnded(true);
+    });
+  }, []);
 
   const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number, onDone?: () => void) => {
     if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
@@ -42,61 +69,36 @@ const Hero = () => {
   }, []);
 
   const toggleMute = useCallback(() => {
-    const silent = silentVideoRef.current;
-    const audio = audioVideoRef.current;
-    if (!silent || !audio) return;
+    const video = videoRef.current;
+    if (!video) return;
 
     if (isMuted) {
-      // Switch from silent to audio video
-      audio.currentTime = silent.currentTime;
-      audio.volume = 0;
-      audio.play();
-      silent.style.display = 'none';
-      audio.style.display = 'block';
+      video.volume = 0;
+      video.muted = false;
+      video.play();
       setIsMuted(false);
-      fadeVolume(audio, 0, 1, 400);
+      fadeVolume(video, 0, 1, 400);
     } else {
-      // Switch from audio to silent video
-      fadeVolume(audio, audio.volume, 0, 400, () => {
-        silent.currentTime = audio.currentTime;
-        audio.style.display = 'none';
-        silent.style.display = 'block';
-        audio.pause();
+      fadeVolume(video, video.volume, 0, 400, () => {
+        video.muted = true;
         setIsMuted(true);
       });
-    }
-  }, [isMuted, fadeVolume]);
-
-  const handleVideoEnd = useCallback(() => {
-    const audio = audioVideoRef.current;
-
-    if (!isMuted && audio) {
-      fadeVolume(audio, audio.volume, 0, 500, () => {
-        audio.pause();
-        setIsMuted(true);
-        setVideoEnded(true);
-      });
-    } else {
-      setVideoEnded(true);
     }
   }, [isMuted, fadeVolume]);
 
   const handleReplay = useCallback(() => {
-    const silent = silentVideoRef.current;
-    const audio = audioVideoRef.current;
-    if (!silent || !audio) return;
+    const video = videoRef.current;
+    if (!video) return;
 
     setVideoEnded(false);
 
     setTimeout(() => {
-      // Replay with audio
-      audio.currentTime = 0;
-      audio.volume = 0;
-      audio.play();
-      silent.style.display = 'none';
-      audio.style.display = 'block';
+      video.currentTime = 0;
+      video.volume = 0;
+      video.muted = false;
+      video.play();
       setIsMuted(false);
-      fadeVolume(audio, 0, 1, 600);
+      fadeVolume(video, 0, 1, 600);
     }, 100);
   }, [fadeVolume]);
 
@@ -122,7 +124,7 @@ const Hero = () => {
         )}
         <ShareButton className="absolute p-4 text-white flex justify-center items-center gap-2 right-0 z-10" />
 
-        {/* Image layer */}
+        {/* Image layer - shown when video ends */}
         <Image
           className={`w-full absolute inset-0 h-full object-cover transition-opacity duration-700 ${
             videoEnded ? 'opacity-100' : 'opacity-0'
@@ -133,33 +135,12 @@ const Hero = () => {
           height={1000}
         />
 
-        {/* Silent video - autoplays reliably on iOS (no audio track) */}
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video
-          ref={silentVideoRef}
+        {/* Video injected via raw HTML to guarantee muted attribute on iOS */}
+        <div
+          ref={containerRef}
           className={`w-full transition-opacity duration-700 ${
             videoEnded ? 'opacity-0' : 'opacity-100'
           }`}
-          src="/video-silent.mp4"
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onEnded={handleVideoEnd}
-        />
-
-        {/* Audio video - hidden by default, shown when unmuted */}
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video
-          ref={audioVideoRef}
-          className={`w-full transition-opacity duration-700 ${
-            videoEnded ? 'opacity-0' : 'opacity-100'
-          }`}
-          style={{ display: 'none' }}
-          src="/video.mp4"
-          playsInline
-          preload="auto"
-          onEnded={handleVideoEnd}
         />
       </div>
       <div>
