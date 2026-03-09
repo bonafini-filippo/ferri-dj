@@ -24,16 +24,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'it_IT',
-    siteName: 'Lorenzo Ferri DJ',
+    siteName: 'Obelica',
     title: 'Lorenzo Ferri | DJ',
     description:
       'Ascolta le ultime tracce su Spotify e SoundCloud. Booking e contatti.',
     images: [
       {
-        url: '/lorenzo-ferri.png',
-        width: 1000,
-        height: 1000,
-        alt: 'Lorenzo Ferri DJ',
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Obelica | Software Systems & AI',
       },
     ],
   },
@@ -42,10 +42,10 @@ export const metadata: Metadata = {
     title: 'Lorenzo Ferri | DJ',
     description:
       'Ascolta le ultime tracce su Spotify e SoundCloud. Booking e contatti.',
-    images: ['/lorenzo-ferri.png'],
+    images: ['/og-image.png'],
   },
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon-dark.png',
     apple: '/apple-touch-icon.png',
   },
 };
