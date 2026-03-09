@@ -16,7 +16,7 @@ const Tracks = ({ title, tracks }: TracksProps) => {
       <Carousel>
         {tracks.map((track) => (
           <div
-            className="embla__slide relative bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] shrink-0 gap-4 overflow-hidden rounded-lg md:min-h-[80px] min-h-[70px]"
+            className="embla__slide relative bg-[#2a2a2a] w-[300px] md:w-[350px] shrink-0 overflow-hidden rounded-lg"
             key={track.id}
           >
             <div className="embla__slide__number">

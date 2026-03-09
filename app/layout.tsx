@@ -4,7 +4,46 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Lorenzo Ferri | DJ',
-  description: 'Lorenzo Ferri - DJ | Music, Booking & Contatti',
+  description:
+    'Lorenzo Ferri DJ — Ascolta le ultime tracce su Spotify e SoundCloud. Booking, contatti e social.',
+  keywords: [
+    'Lorenzo Ferri',
+    'DJ',
+    'DJ italiano',
+    'musica elettronica',
+    'booking DJ',
+    'Spotify',
+    'SoundCloud',
+  ],
+  authors: [{ name: 'Lorenzo Ferri' }],
+  creator: 'Obelica',
+  metadataBase: new URL('https://ferri-lorenzo.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'it_IT',
+    siteName: 'Lorenzo Ferri DJ',
+    title: 'Lorenzo Ferri | DJ',
+    description:
+      'Ascolta le ultime tracce su Spotify e SoundCloud. Booking e contatti.',
+    images: [
+      {
+        url: '/lorenzo-ferri.png',
+        width: 1000,
+        height: 1000,
+        alt: 'Lorenzo Ferri DJ',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lorenzo Ferri | DJ',
+    description:
+      'Ascolta le ultime tracce su Spotify e SoundCloud. Booking e contatti.',
+    images: ['/lorenzo-ferri.png'],
+  },
   icons: {
     icon: '/favicon.png',
     apple: '/apple-touch-icon.png',
@@ -38,7 +77,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" className={sfProDisplay.className}>
-      <body className=" md:flex md:justify-center  bg-gradient-to-r from-[#040404] via-[#0A1535] to-[#1F2227] md:mx-20">
+      <body className="md:flex md:justify-center bg-gradient-to-r from-[#040404] via-[#0A1535] to-[#1F2227] md:mx-20">
         <div className="bg-[#121212] text-white md:max-w-[600px] md:rounded-lg md:overflow-y-hidden">
           {children}
         </div>

@@ -1,5 +1,11 @@
 import Image from 'next/image';
-import { FaInstagram, FaSoundcloud, FaSpotify, FaPhone, FaEnvelope } from 'react-icons/fa';
+import {
+  FaInstagram,
+  FaSoundcloud,
+  FaSpotify,
+  FaPhone,
+  FaEnvelope,
+} from 'react-icons/fa';
 import { FaTiktok } from 'react-icons/fa6';
 import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
@@ -12,7 +18,7 @@ const Hero = () => {
         <Image
           className="w-full"
           src="/lorenzo-ferri.png"
-          alt="Lorenzo Ferri DJ"
+          alt="Lorenzo Ferri DJ in consolle durante un evento live"
           width={1000}
           height={1000}
           priority
@@ -23,35 +29,52 @@ const Hero = () => {
           Lorenzo Ferri
         </h1>
         <p className="text-center text-lg text-gray-400 uppercase tracking-widest">
-          DJ
+          Italian DJ
         </p>
       </div>
-      <div className="flex text-2xl mt-6 justify-center items-center gap-8">
+      <nav
+        aria-label="Social e contatti"
+        className="flex text-2xl mt-6 justify-center items-center gap-8"
+      >
         <Link
           href="https://www.instagram.com/lorenzoo_ferriidj"
           target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
         >
           <FaInstagram />
         </Link>
-        <Link href="https://www.tiktok.com/@lorenzooferrii" target="_blank">
+        <Link
+          href="https://www.tiktok.com/@lorenzooferrii"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok"
+        >
           <FaTiktok />
         </Link>
         <Link
           href="https://soundcloud.com/lorenzo-ferri-189672089"
           target="_blank"
+          rel="noopener noreferrer"
+          aria-label="SoundCloud"
         >
           <FaSoundcloud />
         </Link>
-        <Link href="https://spotify.link/EyLTsr74xDb" target="_blank">
+        <Link
+          href="https://spotify.link/EyLTsr74xDb"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Spotify"
+        >
           <FaSpotify />
         </Link>
-        <Link href="tel:+393312809143">
+        <Link href="tel:+393312809143" aria-label="Chiama">
           <FaPhone />
         </Link>
-        <Link href="mailto:lorenzoferri1102003@gmail.com">
+        <Link href="mailto:lorenzoferri1102003@gmail.com" aria-label="Email">
           <FaEnvelope />
         </Link>
-      </div>
+      </nav>
     </section>
   );
 };
