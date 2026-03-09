@@ -18,21 +18,10 @@ const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  const toggleMute = async () => {
+  const toggleMute = () => {
     if (videoRef.current) {
-      const newMuted = !videoRef.current.muted;
-      videoRef.current.muted = newMuted;
-      if (!newMuted) {
-        try {
-          await videoRef.current.play();
-        } catch {
-          // fallback: se il browser blocca, rimetti muto
-          videoRef.current.muted = true;
-          setIsMuted(true);
-          return;
-        }
-      }
-      setIsMuted(newMuted);
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
     }
   };
 
