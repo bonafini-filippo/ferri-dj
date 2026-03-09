@@ -1,34 +1,48 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { FaSpotify, FaSoundcloud } from 'react-icons/fa';
 
 interface CardProps {
   title: string;
   description: string;
-  image: string;
-  video_id: string;
+  url: string;
+  cover: string;
+  platform: 'spotify' | 'soundcloud';
 }
 
-const Card = ({ title, description, image, video_id }: CardProps) => {
+const Card = ({ title, description, url, cover, platform }: CardProps) => {
+  const isSpotify = platform === 'spotify';
+
   return (
     <Link
-      href={'https://www.youtube.com/watch?v=' + video_id}
-      className="bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] flex shrink-0 justify-start items-center gap-4 overflow-hidden rounded-lg md:min-h-[150px] md:min-w-[150px] min-h-[120px] min-w-[120px]"
+      href={url}
+      target="_blank"
+      className="bg-[#2a2a2a] max-w-[300px] md:max-w-[390px] flex shrink-0 justify-start items-center gap-4 overflow-hidden rounded-lg md:min-h-[100px] min-h-[80px]"
     >
-      {/* Contenitore immagine con proporzioni fisse */}
-      <div className="flex-shrink-0 relative h-[120px] w-[120px] md:h-[150px] md:w-[150px]">
+      <div className="flex-shrink-0 relative h-[80px] w-[80px] md:h-[100px] md:w-[100px]">
         <Image
-          className="object-cover rounded-md"
+          className="object-cover"
           fill
-          src={image}
+          src={cover}
           alt={title}
         />
+        <div
+          className={`absolute bottom-1 right-1 p-1 rounded-full ${
+            isSpotify ? 'bg-[#1DB954]' : 'bg-[#FF5500]'
+          }`}
+        >
+          {isSpotify ? (
+            <FaSpotify className="text-white text-xs" />
+          ) : (
+            <FaSoundcloud className="text-white text-xs" />
+          )}
+        </div>
       </div>
-      {/* Contenitore testo */}
-      <div className="grow overflow-hidden p-1">
-        <h1 className="md:text-xl text-lg mb-1 mr-2 line-clamp-2 font-semibold">
+      <div className="grow overflow-hidden pr-3">
+        <h3 className="md:text-lg text-base font-semibold line-clamp-1">
           {title}
-        </h1>
-        <p className="line-clamp-2 text-sm">{description}</p>
+        </h3>
+        <p className="line-clamp-1 text-sm text-gray-400">{description}</p>
       </div>
     </Link>
   );

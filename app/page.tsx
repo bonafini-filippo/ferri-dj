@@ -1,24 +1,36 @@
-import { getElo, getPosition } from '@/actions/getElo';
-import { getTwVideos, getYtVideos, isLive } from '@/actions/getVideos';
-import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
-import ScoreElo from '@/components/ScoreElo';
-import TwVideos from '@/components/TwVideos';
-import YtVideos from '@/components/YtVideos';
+import Tracks from '@/components/Tracks';
+import { tracks } from '@/data/tracks';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default async function Home() {
-  const isTwLive = await isLive();
-  const RecentVideos = await getYtVideos();
-  const RecentLive = await getTwVideos();
-  const score = await getElo();
-  const position = await getPosition();
+export default function Home() {
+  const spotifyTracks = tracks.filter((t) => t.platform === 'spotify');
+  const soundcloudTracks = tracks.filter((t) => t.platform === 'soundcloud');
+
   return (
     <div>
-      <Hero isTwLive={isTwLive} />
-      <YtVideos recentVideos={RecentVideos} />
-      <TwVideos recentLive={RecentLive} isTwLive={isTwLive} />
-      <ScoreElo score={score} position={position} />
-      <Footer />
+      <Hero />
+      {spotifyTracks.length > 0 && (
+        <Tracks title="Spotify" tracks={spotifyTracks} />
+      )}
+      {soundcloudTracks.length > 0 && (
+        <Tracks title="SoundCloud" tracks={soundcloudTracks} />
+      )}
+      <div className="flex justify-center items-center gap-2 py-8 opacity-40 hover:opacity-70 transition-opacity">
+        <Link
+          href="https://www.obelica.com"
+          target="_blank"
+          className="flex items-center gap-2"
+        >
+          <Image
+            src="/obelica-dark.svg"
+            width={80}
+            height={20}
+            alt="Obelica"
+          />
+        </Link>
+      </div>
     </div>
   );
 }

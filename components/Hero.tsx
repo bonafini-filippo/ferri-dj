@@ -1,63 +1,55 @@
 import Image from 'next/image';
-import MoroniImg from '@/public/luca-moroni.png';
-// import MoroniImg from '@/public/luca-moroni.jpeg';
-import { FaInstagram, FaYoutube, FaTwitch, FaChess } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
-import { FaCircle } from 'react-icons/fa';
+import { FaInstagram, FaSoundcloud, FaSpotify, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaTiktok } from 'react-icons/fa6';
 import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
 
-const Hero = ({ isTwLive }: { isTwLive: boolean }) => {
+const Hero = () => {
   return (
     <section>
-      {/* IMMAGINE DI COPERTINA */}
       <div className="relative">
-        {isTwLive && (
-          <Link
-            href={'https://www.twitch.tv/gm_moro'}
-            className="absolute p-4 text-red-500 flex justify-center items-center gap-2"
-          >
-            <FaCircle />
-            <span className="text-xl uppercase">Live now</span>
-          </Link>
-        )}
-        <ShareButton className="absolute p-4 text-red-500 flex justify-center items-center gap-2 right-0" />
+        <ShareButton className="absolute p-4 text-white flex justify-center items-center gap-2 right-0 z-10" />
         <Image
           className="w-full"
-          src={MoroniImg}
-          alt="Luca Moroni"
+          src="/lorenzo-ferri.png"
+          alt="Lorenzo Ferri DJ"
           width={1000}
           height={1000}
+          priority
         />
       </div>
-      {/* TITOLO */}
       <div>
-        <h1 className="text-[38px]  text-center font-bold mt-7 ">
-          Luca Moroni Jr
+        <h1 className="text-[38px] text-center font-bold mt-7">
+          Lorenzo Ferri
         </h1>
+        <p className="text-center text-lg text-gray-400 uppercase tracking-widest">
+          DJ
+        </p>
       </div>
-      {/* SOCIAL  */}
-      <div className="flex text-2xl mt-6 justify-center items-center gap-10">
-        <Link href={'https://www.instagram.com/lucamoronijr/'}>
+      <div className="flex text-2xl mt-6 justify-center items-center gap-8">
+        <Link
+          href="https://www.instagram.com/lorenzoo_ferriidj"
+          target="_blank"
+        >
           <FaInstagram />
         </Link>
-        <Link href={'https://www.youtube.com/@gm_moro6252'}>
-          <FaYoutube />
+        <Link href="https://www.tiktok.com/@lorenzooferrii" target="_blank">
+          <FaTiktok />
         </Link>
-        <Link href={'https://www.twitch.tv/gm_moro'} className="relative">
-          {isTwLive && (
-            <FaCircle
-              size={12}
-              className="absolute -top-1 -left-1 text-red-500"
-            />
-          )}
-          <FaTwitch />
+        <Link
+          href="https://soundcloud.com/lorenzo-ferri-189672089"
+          target="_blank"
+        >
+          <FaSoundcloud />
         </Link>
-        <Link href={''}>
-          <FaXTwitter />
+        <Link href="https://spotify.link/EyLTsr74xDb" target="_blank">
+          <FaSpotify />
         </Link>
-        <Link href={'https://ratings.fide.com/profile/865834'}>
-          <FaChess />
+        <Link href="tel:+393312809143">
+          <FaPhone />
+        </Link>
+        <Link href="mailto:lorenzoferri1102003@gmail.com">
+          <FaEnvelope />
         </Link>
       </div>
     </section>

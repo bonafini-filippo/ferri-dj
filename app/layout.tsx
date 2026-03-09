@@ -3,8 +3,12 @@ import localFont from 'next/font/local';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'GM - Luca Moroni',
-  description: 'Scacchista professionista',
+  title: 'Lorenzo Ferri | DJ',
+  description: 'Lorenzo Ferri - DJ | Music, Booking & Contatti',
+  icons: {
+    icon: '/favicon.png',
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 const sfProDisplay = localFont({

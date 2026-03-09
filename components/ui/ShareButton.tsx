@@ -10,8 +10,8 @@ const ShareButton = ({ className }: ShareButtonProps) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Condividi questa pagina',
-          text: 'Guarda questa fantastica pagina!',
+          title: 'Lorenzo Ferri DJ',
+          text: 'Scopri Lorenzo Ferri DJ!',
           url: window.location.href, // URL attuale
         });
         console.log('Condivisione avvenuta con successo!');
