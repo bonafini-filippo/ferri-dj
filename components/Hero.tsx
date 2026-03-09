@@ -17,37 +17,33 @@ import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
 
 const Hero = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [videoEnded, setVideoEnded] = useState(false);
 
-  // Inject video as raw HTML to bypass React hydration muted bug on iOS
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.innerHTML = `<video src="/video.mp4" autoplay muted playsinline webkit-playsinline preload="auto" style="width:100%"></video>`;
-
-    const video = container.querySelector('video');
+    const video = videoRef.current;
     if (!video) return;
-    videoRef.current = video;
 
-    video.muted = true;
+    // Fix React hydration bug: force muted attribute in DOM for iOS autoplay
     video.defaultMuted = true;
+    video.muted = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
 
-    const tryPlay = () => {
+    video.load();
+    video.play().catch(() => {});
+
+    const onCanPlay = () => {
       video.play().catch(() => {});
     };
+    video.addEventListener('canplay', onCanPlay);
 
-    tryPlay();
-    video.addEventListener('canplay', tryPlay, { once: true });
-    setTimeout(tryPlay, 300);
-
-    video.addEventListener('ended', () => {
-      setVideoEnded(true);
-    });
+    return () => {
+      video.removeEventListener('canplay', onCanPlay);
+    };
   }, []);
 
   const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number, onDone?: () => void) => {
@@ -85,6 +81,21 @@ const Hero = () => {
       });
     }
   }, [isMuted, fadeVolume]);
+
+  const handleVideoEnd = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (!video.muted) {
+      fadeVolume(video, video.volume, 0, 500, () => {
+        video.muted = true;
+        setIsMuted(true);
+        setVideoEnded(true);
+      });
+    } else {
+      setVideoEnded(true);
+    }
+  }, [fadeVolume]);
 
   const handleReplay = useCallback(() => {
     const video = videoRef.current;
@@ -124,7 +135,6 @@ const Hero = () => {
         )}
         <ShareButton className="absolute p-4 text-white flex justify-center items-center gap-2 right-0 z-10" />
 
-        {/* Image layer - shown when video ends */}
         <Image
           className={`w-full absolute inset-0 h-full object-cover transition-opacity duration-700 ${
             videoEnded ? 'opacity-100' : 'opacity-0'
@@ -135,13 +145,20 @@ const Hero = () => {
           height={1000}
         />
 
-        {/* Video injected via raw HTML to guarantee muted attribute on iOS */}
-        <div
-          ref={containerRef}
+        <video
+          ref={videoRef}
           className={`w-full transition-opacity duration-700 ${
             videoEnded ? 'opacity-0' : 'opacity-100'
           }`}
-        />
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          onEnded={handleVideoEnd}
+          suppressHydrationWarning
+        >
+          <source src="/video.mp4" type="video/mp4" />
+        </video>
       </div>
       <div>
         <h1 className="text-[38px] text-center font-bold mt-7">
