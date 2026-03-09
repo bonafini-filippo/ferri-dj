@@ -1,20 +1,43 @@
+'use client';
+
+import { useRef, useState } from 'react';
 import {
   FaInstagram,
   FaSoundcloud,
   FaSpotify,
   FaPhone,
   FaEnvelope,
+  FaVolumeUp,
+  FaVolumeMute,
 } from 'react-icons/fa';
 import { FaTiktok } from 'react-icons/fa6';
 import Link from 'next/link';
 import ShareButton from './ui/ShareButton';
 
 const Hero = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
   return (
     <section>
       <div className="relative">
+        <button
+          onClick={toggleMute}
+          className="absolute p-4 text-white left-0 z-10"
+          aria-label={isMuted ? 'Attiva audio' : 'Disattiva audio'}
+        >
+          {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+        </button>
         <ShareButton className="absolute p-4 text-white flex justify-center items-center gap-2 right-0 z-10" />
         <video
+          ref={videoRef}
           className="w-full"
           src="/video.mp4"
           autoPlay
