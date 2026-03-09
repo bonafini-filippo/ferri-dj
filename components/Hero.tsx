@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import Image from 'next/image';
 import {
   FaInstagram,
@@ -18,51 +18,27 @@ import ShareButton from './ui/ShareButton';
 
 const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const fadeRef = useRef<number | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [videoEnded, setVideoEnded] = useState(false);
 
-  // Force autoplay on mount (mobile browsers sometimes block autoPlay attribute)
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    const tryPlay = () => {
-      video.muted = true;
-      video.play().catch(() => {
-        // If still blocked, retry on first user interaction
-        const playOnInteraction = () => {
-          video.muted = true;
-          video.play();
-          document.removeEventListener('touchstart', playOnInteraction);
-          document.removeEventListener('click', playOnInteraction);
-        };
-        document.addEventListener('touchstart', playOnInteraction, { once: true });
-        document.addEventListener('click', playOnInteraction, { once: true });
-      });
-    };
-
-    if (video.readyState >= 2) {
-      tryPlay();
-    } else {
-      video.addEventListener('loadeddata', tryPlay, { once: true });
-    }
-  }, []);
-
-  const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number) => {
-    if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
+  const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number, onDone?: () => void) => {
+    if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
     const steps = 20;
     const interval = duration / steps;
     let step = 0;
-    const tick = () => {
+    video.volume = Math.min(Math.max(from, 0), 1);
+    fadeTimerRef.current = setInterval(() => {
       step++;
       const progress = step / steps;
       video.volume = Math.min(Math.max(from + (to - from) * progress, 0), 1);
-      if (step < steps) {
-        fadeRef.current = requestAnimationFrame(() => setTimeout(tick, interval));
+      if (step >= steps) {
+        if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
+        fadeTimerRef.current = null;
+        onDone?.();
       }
-    };
-    tick();
+    }, interval);
   }, []);
 
   const toggleMute = useCallback(() => {
@@ -73,13 +49,13 @@ const Hero = () => {
       video.volume = 0;
       video.muted = false;
       setIsMuted(false);
+      video.play();
       fadeVolume(video, 0, 1, 400);
     } else {
-      fadeVolume(video, video.volume, 0, 400);
-      setTimeout(() => {
+      fadeVolume(video, video.volume, 0, 400, () => {
         video.muted = true;
         setIsMuted(true);
-      }, 420);
+      });
     }
   }, [isMuted, fadeVolume]);
 
@@ -87,14 +63,12 @@ const Hero = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // fade out audio before showing image
     if (!video.muted) {
-      fadeVolume(video, video.volume, 0, 500);
-      setTimeout(() => {
+      fadeVolume(video, video.volume, 0, 500, () => {
         video.muted = true;
         setIsMuted(true);
         setVideoEnded(true);
-      }, 520);
+      });
     } else {
       setVideoEnded(true);
     }
