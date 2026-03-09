@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import {
   FaInstagram,
   FaSoundcloud,
@@ -15,13 +14,13 @@ const Hero = () => {
     <section>
       <div className="relative">
         <ShareButton className="absolute p-4 text-white flex justify-center items-center gap-2 right-0 z-10" />
-        <Image
+        <video
           className="w-full"
-          src="/lorenzo-ferri.png"
-          alt="Lorenzo Ferri DJ in consolle durante un evento live"
-          width={1000}
-          height={1000}
-          priority
+          src="/video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
         />
       </div>
       <div>
