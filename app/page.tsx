@@ -39,17 +39,22 @@ export default function Home() {
         {soundcloudTracks.length > 0 && (
           <Tracks title="SoundCloud" tracks={soundcloudTracks} />
         )}
-        <div className="flex justify-center items-center gap-2 py-8 opacity-40 hover:opacity-70 transition-opacity">
+        <div className="mx-4 mt-10 mb-6">
+          <div className="h-[0.5px] w-full bg-[#2a2a2a]" />
+        </div>
+        <div className="flex flex-col items-center gap-1 pb-8 opacity-50 hover:opacity-80 transition-opacity">
+          <span className="text-xs text-gray-500 uppercase tracking-widest">
+            powered by
+          </span>
           <Link
             href="https://www.obelica.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2"
           >
             <Image
               src="/obelica-dark.svg"
-              width={80}
-              height={20}
+              width={120}
+              height={30}
               alt="Obelica"
             />
           </Link>

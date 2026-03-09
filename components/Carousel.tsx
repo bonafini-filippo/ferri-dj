@@ -10,7 +10,10 @@ type PropType = {
 
 const Carousel: React.FC<PropType> = (props) => {
   const { options, children } = props;
-  const [emblaRef] = useEmblaCarousel(options);
+  const [emblaRef] = useEmblaCarousel({
+    dragFree: true,
+    ...options,
+  });
 
   return (
     <section className="embla">
