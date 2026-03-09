@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Lorenzo Ferri' }],
   creator: 'Obelica',
-  metadataBase: new URL('https://ferri-lorenzo.vercel.app'),
+  metadataBase: new URL('https://ferridj.obelica.com'),
   alternates: {
     canonical: '/',
   },

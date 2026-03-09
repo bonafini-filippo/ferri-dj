@@ -10,7 +10,7 @@ const jsonLd = {
   '@type': 'MusicGroup',
   name: 'Lorenzo Ferri',
   description: 'DJ italiano',
-  url: 'https://ferri-lorenzo.vercel.app',
+  url: 'https://ferridj.obelica.com',
   genre: 'Electronic',
   sameAs: [
     'https://www.instagram.com/lorenzoo_ferriidj',

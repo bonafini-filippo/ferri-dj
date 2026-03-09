@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://ferri-lorenzo.vercel.app/sitemap.xml',
+    sitemap: 'https://ferridj.obelica.com/sitemap.xml',
   };
 }
