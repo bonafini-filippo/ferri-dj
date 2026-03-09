@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import Image from 'next/image';
 import {
   FaInstagram,
   FaSoundcloud,
@@ -9,6 +10,7 @@ import {
   FaEnvelope,
   FaVolumeUp,
   FaVolumeMute,
+  FaUndo,
 } from 'react-icons/fa';
 import { FaTiktok } from 'react-icons/fa6';
 import Link from 'next/link';
@@ -16,34 +18,123 @@ import ShareButton from './ui/ShareButton';
 
 const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fadeRef = useRef<number | null>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [videoEnded, setVideoEnded] = useState(false);
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
+  const fadeVolume = useCallback((video: HTMLVideoElement, from: number, to: number, duration: number) => {
+    if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
+    const steps = 20;
+    const interval = duration / steps;
+    let step = 0;
+    const tick = () => {
+      step++;
+      const progress = step / steps;
+      video.volume = Math.min(Math.max(from + (to - from) * progress, 0), 1);
+      if (step < steps) {
+        fadeRef.current = requestAnimationFrame(() => setTimeout(tick, interval));
+      }
+    };
+    tick();
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isMuted) {
+      video.volume = 0;
+      video.muted = false;
+      setIsMuted(false);
+      fadeVolume(video, 0, 1, 400);
+    } else {
+      fadeVolume(video, video.volume, 0, 400);
+      setTimeout(() => {
+        video.muted = true;
+        setIsMuted(true);
+      }, 420);
     }
-  };
+  }, [isMuted, fadeVolume]);
+
+  const handleVideoEnd = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // fade out audio before showing image
+    if (!video.muted) {
+      fadeVolume(video, video.volume, 0, 500);
+      setTimeout(() => {
+        video.muted = true;
+        setIsMuted(true);
+        setVideoEnded(true);
+      }, 520);
+    } else {
+      setVideoEnded(true);
+    }
+  }, [fadeVolume]);
+
+  const handleReplay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setVideoEnded(false);
+
+    // small delay to let crossfade start, then play with audio
+    setTimeout(() => {
+      video.currentTime = 0;
+      video.volume = 0;
+      video.muted = false;
+      video.play();
+      setIsMuted(false);
+      fadeVolume(video, 0, 1, 600);
+    }, 100);
+  }, [fadeVolume]);
 
   return (
     <section>
       <div className="relative">
-        <button
-          onClick={toggleMute}
-          className="absolute p-4 text-white left-0 z-10"
-          aria-label={isMuted ? 'Attiva audio' : 'Disattiva audio'}
-        >
-          {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-        </button>
+        {/* Top-left button: mute/unmute or replay */}
+        {videoEnded ? (
+          <button
+            onClick={handleReplay}
+            className="absolute p-4 text-white left-0 z-10"
+            aria-label="Rivedi video"
+          >
+            <FaUndo />
+          </button>
+        ) : (
+          <button
+            onClick={toggleMute}
+            className="absolute p-4 text-white left-0 z-10"
+            aria-label={isMuted ? 'Attiva audio' : 'Disattiva audio'}
+          >
+            {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+          </button>
+        )}
         <ShareButton className="absolute p-4 text-white flex justify-center items-center gap-2 right-0 z-10" />
+
+        {/* Image layer */}
+        <Image
+          className={`w-full absolute inset-0 h-full object-cover transition-opacity duration-700 ${
+            videoEnded ? 'opacity-100' : 'opacity-0'
+          }`}
+          src="/lorenzo-ferri.png"
+          alt="Lorenzo Ferri DJ"
+          width={1000}
+          height={1000}
+        />
+
+        {/* Video layer */}
         <video
           ref={videoRef}
-          className="w-full"
+          className={`w-full transition-opacity duration-700 ${
+            videoEnded ? 'opacity-0' : 'opacity-100'
+          }`}
           src="/video.mp4"
           autoPlay
-          loop
           muted
           playsInline
+          onEnded={handleVideoEnd}
         />
       </div>
       <div>
